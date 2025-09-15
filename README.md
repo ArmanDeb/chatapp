@@ -1,105 +1,304 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# 💬 ChatApp - Application de Messagerie B2B Temps Réel
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+Une application de messagerie d'équipe moderne et complète construite avec **Next.js 15** et **Supabase**, offrant une communication temps réel pour les équipes professionnelles.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-green?logo=supabase)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?logo=tailwind-css)
 
-## Features
+## 🚀 Fonctionnalités
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+### ✅ **MVP Complet**
+- **🔐 Authentification** - Inscription/connexion sécurisée avec Supabase Auth
+- **👥 Gestion d'équipes** - Création, invitation, gestion des rôles (owner/admin/member)
+- **📢 Canaux de discussion** - Canaux publics et privés avec gestion des membres
+- **💬 Messagerie temps réel** - Messages instantanés avec Supabase Realtime
+- **📩 Messages privés** - Conversations directes 1:1 entre utilisateurs
+- **📎 Upload de fichiers** - Documents, images avec drag & drop (Supabase Storage)
+- **👁️ Présence en ligne** - Statuts utilisateur (online/away/busy/offline)
+- **🔔 Notifications** - Mentions, nouveaux messages avec notifications navigateur
+- **⚡ Réactions** - Emojis sur les messages
+- **🧵 Threads** - Réponses organisées (prêt à implémenter)
+- **🔍 Recherche** - Interface de recherche dans les messages
+- **🎨 Interface moderne** - Design professionnel avec thème dark/light
 
-## Demo
+### 🛠️ **Architecture Technique**
+- **Frontend** : Next.js 15 (App Router, Server Actions, RSC)
+- **Backend** : Supabase (PostgreSQL, Auth, Storage, Realtime)
+- **UI** : Tailwind CSS + shadcn/ui
+- **Types** : TypeScript avec types générés Supabase
+- **Sécurité** : Row Level Security (RLS) complet
+- **Temps réel** : WebSocket via Supabase Realtime
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## 📋 Prérequis
 
-## Deploy to Vercel
+- **Node.js** 18+ 
+- **npm** ou **yarn**
+- **Compte Supabase** (gratuit)
 
-Vercel deployment will guide you through creating a Supabase account and project.
+## 🏗️ Installation
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
-
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
-
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
-
-## Clone and run locally
-
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
-
-2. Create a Next.js app using the Supabase Starter template npx command
-
+### 1. **Cloner le projet**
    ```bash
-   npx create-next-app --example with-supabase with-supabase-app
+git clone <your-repo-url>
+cd chatapp
    ```
 
+### 2. **Installer les dépendances**
    ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+npm install
+```
 
+### 3. **Configuration Supabase**
+
+#### Créer un projet Supabase
+1. Allez sur [supabase.com](https://supabase.com)
+2. Créez un nouveau projet
+3. Notez votre **URL** et **clé anon** (Settings > API)
+
+#### Configurer les variables d'environnement
    ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+# Créer le fichier .env.local
+cp env.example .env.local
+```
 
-3. Use `cd` to change into the app's directory
+Remplissez `.env.local` :
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY=your-anon-key
+```
 
-   ```bash
-   cd with-supabase-app
-   ```
+### 4. **Exécuter les migrations SQL**
 
-4. Rename `.env.example` to `.env.local` and update the following:
+Dans votre dashboard Supabase → **SQL Editor**, exécutez dans l'ordre :
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+1. **Tables principales** : `supabase/migrations/001_initial_schema.sql`
+2. **Sécurité RLS** : `supabase/migrations/002_security_policies.sql`  
+3. **Fonctions** : `supabase/migrations/003_realtime_functions.sql`
+4. **Realtime** : `supabase/migrations/004_enable_realtime.sql`
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+### 5. **Configurer le Storage**
 
-5. You can now run the Next.js local development server:
+Dans Supabase → **Storage** :
+1. Créer un bucket `files`
+2. Le rendre **Public**
+
+### 6. **Configurer l'authentification**
+
+Dans Supabase → **Authentication** → **Settings** :
+1. **Site URL** : `http://localhost:3000`
+2. **Redirect URLs** : `http://localhost:3000/auth/callback`
+
+## 🚀 Lancer l'application
 
    ```bash
    npm run dev
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+## 📁 Structure du projet
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+```
+chatapp/
+├── app/                          # Pages Next.js (App Router)
+│   ├── app/                     # Application principale (protégée)
+│   │   ├── layout.tsx          # Layout avec providers
+│   │   ├── page.tsx            # Page d'accueil app
+│   │   └── teams/              # Gestion équipes (à implémenter)
+│   ├── auth/                   # Pages d'authentification
+│   │   ├── login/
+│   │   ├── sign-up/
+│   │   └── ...
+│   ├── layout.tsx              # Layout racine
+│   └── page.tsx                # Redirection vers app
+├── components/                  # Composants React
+│   ├── chat/                   # Composants messagerie
+│   │   ├── chat-context.tsx   # Context temps réel
+│   │   ├── message-list.tsx   # Liste des messages
+│   │   ├── message-item.tsx   # Affichage message
+│   │   ├── message-input.tsx  # Saisie message
+│   │   └── file-upload.tsx    # Upload fichiers
+│   ├── layout/                 # Layout application
+│   │   ├── app-sidebar.tsx    # Sidebar navigation
+│   │   └── app-header.tsx     # Header avec recherche
+│   ├── notifications/          # Système notifications
+│   ├── presence/              # Gestion présence
+│   └── ui/                    # Composants UI base
+├── lib/                        # Utilitaires et logique
+│   ├── actions/               # Server Actions Next.js
+│   │   ├── teams.ts          # Actions équipes
+│   │   ├── channels.ts       # Actions canaux
+│   │   ├── messages.ts       # Actions messages
+│   │   ├── files.ts          # Actions fichiers
+│   │   └── direct-messages.ts # Actions DM
+│   ├── supabase/             # Configuration Supabase
+│   │   ├── client.ts         # Client côté navigateur
+│   │   ├── server.ts         # Client côté serveur
+│   │   └── middleware.ts     # Middleware auth
+│   └── types/                # Types TypeScript
+│       ├── database.ts       # Types générés Supabase
+│       └── app.ts           # Types application
+├── supabase/                   # Migrations et config Supabase
+│   └── migrations/            # Scripts SQL
+└── README.md                  # Ce fichier
+```
 
-## Feedback and issues
+## 🎯 Utilisation
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+### **Premier démarrage**
 
-## More Supabase examples
+1. **Créer un compte** sur la page d'inscription
+2. **Créer votre première équipe**
+3. **Inviter des membres** (optionnel)
+4. **Commencer à chatter** dans le canal #general
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+### **Fonctionnalités principales**
+
+- **📢 Canaux** : Créez des canaux publics ou privés
+- **💬 Messages** : Envoyez des messages avec formatage
+- **📎 Fichiers** : Glissez-déposez vos documents
+- **😀 Réactions** : Réagissez avec des emojis
+- **@Mentions** : Mentionnez des utilisateurs
+- **🔍 Recherche** : Trouvez vos messages rapidement
+- **📱 Temps réel** : Tout se synchronise instantanément
+
+## 🔧 Développement
+
+### **Commandes utiles**
+
+```bash
+# Développement
+npm run dev
+
+# Build de production
+npm run build
+npm start
+
+# Linting
+npm run lint
+
+# Types Supabase (si configuré)
+npm run types:generate
+```
+
+### **Structure de la base de données**
+
+**Tables principales :**
+- `profiles` - Profils utilisateurs
+- `teams` - Équipes/organisations  
+- `team_members` - Membres avec rôles
+- `channels` - Canaux de discussion
+- `messages` - Messages avec métadonnées
+- `direct_messages` - Conversations privées
+- `files` - Métadonnées fichiers
+- `notifications` - Notifications système
+- `user_presence` - Statuts de présence
+
+### **API & Server Actions**
+
+Toutes les opérations utilisent les **Server Actions** Next.js :
+- `createTeam()`, `joinTeam()`, `leaveTeam()`
+- `createChannel()`, `updateChannel()`, `deleteChannel()`
+- `sendMessage()`, `updateMessage()`, `deleteMessage()`
+- `uploadFile()`, `deleteFile()`
+- `createOrGetDirectMessage()`
+
+## 🚀 Déploiement
+
+### **Vercel + Supabase (Recommandé)**
+
+1. **Push sur GitHub**
+2. **Connecter à Vercel**
+3. **Configurer les variables d'environnement**
+4. **Déployer !**
+
+Voir [README-DEPLOYMENT.md](README-DEPLOYMENT.md) pour le guide détaillé.
+
+### **Variables d'environnement production**
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+## 🔒 Sécurité
+
+- **🛡️ Row Level Security** - Toutes les tables protégées
+- **🔐 Authentification** - Gestion complète des sessions
+- **👥 Permissions** - Rôles granulaires (owner/admin/member)
+- **🔒 Validation** - Validation côté serveur et client
+- **🚫 CORS** - Configuration sécurisée
+
+## 🎨 Personnalisation
+
+### **Thèmes**
+- Support dark/light mode
+- Personnalisation via CSS variables
+- Composants shadcn/ui modifiables
+
+### **Extensions futures**
+- 📞 Appels audio/vidéo
+- 🤖 Bots et intégrations
+- 📊 Analytics d'équipe
+- 🔍 Recherche full-text avancée
+- 📚 Base de connaissances
+
+## 🐛 Dépannage
+
+### **Problèmes courants**
+
+**❌ Application ne charge pas**
+- Vérifiez les variables d'environnement
+- Exécutez les migrations SQL
+- Vérifiez la console navigateur (F12)
+
+**❌ Messages temps réel ne fonctionnent pas**
+- Vérifiez la configuration Realtime dans Supabase
+- Exécutez `004_enable_realtime.sql`
+
+**❌ Upload de fichiers échoue**
+- Créez le bucket `files` dans Supabase Storage
+- Vérifiez les politiques RLS du storage
+
+**❌ Erreurs d'authentification**
+- Vérifiez les URLs de redirection
+- Configurez correctement la Site URL
+
+### **Logs et debugging**
+
+```bash
+# Logs Next.js
+npm run dev
+
+# Logs Supabase (dashboard)
+# Supabase → Logs → API/Database
+```
+
+## 🤝 Contribution
+
+1. **Fork** le projet
+2. **Créer** une branche (`git checkout -b feature/amazing-feature`)
+3. **Commit** vos changements (`git commit -m 'Add amazing feature'`)
+4. **Push** vers la branche (`git push origin feature/amazing-feature`)
+5. **Ouvrir** une Pull Request
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## 🙏 Remerciements
+
+- **[Next.js](https://nextjs.org/)** - Framework React
+- **[Supabase](https://supabase.com/)** - Backend-as-a-Service
+- **[Tailwind CSS](https://tailwindcss.com/)** - Framework CSS
+- **[shadcn/ui](https://ui.shadcn.com/)** - Composants UI
+- **[Lucide](https://lucide.dev/)** - Icônes
+
+---
+
+**🚀 Prêt à révolutionner la communication de votre équipe ?**
+
+[Démarrer maintenant](#-installation) • [Documentation complète](README-DEPLOYMENT.md) • [Signaler un bug](issues)
