@@ -24,7 +24,7 @@ export default async function DebugTeamsPage() {
           email
         )
       )
-    `)
+    `) as any
 
   // Get teams where current user is a member
   const { data: userTeams, error: userTeamsError } = await supabase
@@ -42,7 +42,7 @@ export default async function DebugTeamsPage() {
         )
       )
     `)
-    .eq('team_members.user_id', user.id)
+    .eq('team_members.user_id', user.id) as any
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
@@ -58,7 +58,7 @@ export default async function DebugTeamsPage() {
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">All Teams ({teams?.length || 0})</h2>
-        {teams?.map(team => (
+        {teams?.map((team: any) => (
           <div key={team.id} className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
             <h3 className="font-bold">{team.name}</h3>
             <p><strong>Created by:</strong> {team.created_by}</p>
@@ -68,7 +68,7 @@ export default async function DebugTeamsPage() {
               <strong>Members ({team.team_members?.length || 0}):</strong>
               {team.team_members?.length ? (
                 <ul className="ml-4 mt-1">
-                  {team.team_members.map(member => (
+                  {team.team_members.map((member: any) => (
                     <li key={member.id} className="flex items-center gap-2">
                       <span>{member.profiles?.display_name || member.profiles?.email}</span>
                       <span className="text-sm bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded">
@@ -93,7 +93,7 @@ export default async function DebugTeamsPage() {
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Your Teams ({userTeams?.length || 0})</h2>
-        {userTeams?.map(team => (
+        {userTeams?.map((team: any) => (
           <div key={team.id} className="bg-green-50 dark:bg-green-950/20 p-4 rounded-lg">
             <h3 className="font-bold">{team.name}</h3>
             <p><strong>Your role:</strong> {team.team_members?.[0]?.role}</p>

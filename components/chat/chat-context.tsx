@@ -15,11 +15,18 @@ import { sendMessage, getMessages } from '@/lib/actions/messages'
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
-export function ChatProvider({ children }: { children: React.ReactNode }) {
+interface ChatProviderProps {
+  children: React.ReactNode
+  channel?: Channel
+  teamId?: string
+  channelId?: string
+}
+
+export function ChatProvider({ children, channel, teamId, channelId }: ChatProviderProps) {
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null)
-  const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
+  const [currentChannel, setCurrentChannel] = useState<Channel | null>(channel || null)
   const [currentDM, setCurrentDM] = useState<DirectMessage | null>(null)
-  const [messages, setMessages] = useState<MessageWithAuthor[]>([])
+  const [messages, setMessages] = useState<MessageWithAuthor[]>([] as MessageWithAuthor[])
   const [isLoading, setIsLoading] = useState(false)
   const supabase = createClient()
 
@@ -112,13 +119,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
             .single()
 
           if (updatedMessage) {
-            setMessages(prev => 
-              prev.map(msg => 
+            setMessages(prev => {
+              const messages: MessageWithAuthor[] = prev
+              return messages.map((msg: MessageWithAuthor) => 
                 msg.id === updatedMessage.id 
                   ? updatedMessage as MessageWithAuthor 
                   : msg
               )
-            )
+            })
           }
         }
       )
@@ -170,13 +178,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
             .eq('message_id', messageId)
 
           if (reactions) {
-            setMessages(prev => 
-              prev.map(msg => 
+            setMessages(prev => {
+              const messages: MessageWithAuthor[] = prev
+              return messages.map((msg: MessageWithAuthor) => 
                 msg.id === messageId 
                   ? { ...msg, reactions }
                   : msg
               )
-            )
+            })
           }
         }
       )

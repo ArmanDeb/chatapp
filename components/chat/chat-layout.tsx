@@ -5,14 +5,18 @@ import { ChatProvider } from './chat-context'
 import { MessageList } from './message-list'
 import { MessageInput } from './message-input'
 import { ChatHeader } from './chat-header'
+import { Channel } from '@/lib/types/app'
 
 interface ChatLayoutProps {
+  channel: Channel
+  teamId: string
+  channelId: string
   children?: React.ReactNode
 }
 
-export function ChatLayout({ children }: ChatLayoutProps) {
+export function ChatLayout({ channel, teamId, channelId, children }: ChatLayoutProps) {
   return (
-    <ChatProvider>
+    <ChatProvider channel={channel} teamId={teamId} channelId={channelId}>
       <div className="flex flex-col h-full">
         {/* Chat header */}
         <ChatHeader />

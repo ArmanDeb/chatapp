@@ -4,13 +4,14 @@ import { getChannelById } from '@/lib/actions/channels'
 import { ChatLayout } from '@/components/chat/chat-layout'
 
 interface ChannelPageProps {
-  params: {
+  params: Promise<{
     teamId: string
     channelId: string
-  }
+  }>
 }
 
 export default async function ChannelPage({ params }: ChannelPageProps) {
+  const { teamId, channelId } = await params
   const supabase = await createClient()
   const { data: { user }, error } = await supabase.auth.getUser()
 
@@ -19,17 +20,17 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
   }
 
   // Get channel details
-  const { data: channel, error: channelError } = await getChannelById(params.channelId)
+  const { data: channel, error: channelError } = await getChannelById(channelId)
 
   if (channelError || !channel) {
-    redirect(`/app/teams/${params.teamId}`)
+    redirect(`/app/teams/${teamId}`)
   }
 
   // Verify user has access to this channel
   const { data: membership } = await supabase
     .from('team_members')
     .select('*')
-    .eq('team_id', params.teamId)
+    .eq('team_id', teamId)
     .eq('user_id', user.id)
     .single()
 
@@ -40,8 +41,8 @@ export default async function ChannelPage({ params }: ChannelPageProps) {
   return (
     <ChatLayout 
       channel={channel} 
-      teamId={params.teamId}
-      channelId={params.channelId}
+      teamId={teamId}
+      channelId={channelId}
     />
   )
 }

@@ -1,5 +1,8 @@
 import { Database } from './database'
 
+// Re-export database types
+export type UserStatus = Database['public']['Enums']['user_status']
+
 // Type helpers
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 export type TablesInsert<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert']
@@ -22,7 +25,7 @@ export type FileRecord = Tables<'files'>
 export interface MessageWithAuthor extends Message {
   author: Profile
   reactions?: MessageReactionWithUser[]
-  replies?: MessageWithAuthor[]
+  replies?: Message[]
 }
 
 export interface MessageReactionWithUser extends MessageReaction {

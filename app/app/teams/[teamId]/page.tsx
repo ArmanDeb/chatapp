@@ -3,12 +3,13 @@ import { redirect } from 'next/navigation'
 import { getTeamById } from '@/lib/actions/teams'
 
 interface TeamPageProps {
-  params: {
+  params: Promise<{
     teamId: string
-  }
+  }>
 }
 
 export default async function TeamPage({ params }: TeamPageProps) {
+  const { teamId } = await params
   const supabase = await createClient()
   const { data: { user }, error } = await supabase.auth.getUser()
 
@@ -17,7 +18,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
   }
 
   // Get team details
-  const { data: team, error: teamError } = await getTeamById(params.teamId)
+  const { data: team, error: teamError } = await getTeamById(teamId)
 
   if (teamError || !team) {
     redirect('/app')
@@ -26,7 +27,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
   // Redirect to the first channel (usually 'general')
   const firstChannel = team.channels?.[0]
   if (firstChannel) {
-    redirect(`/app/teams/${params.teamId}/channels/${firstChannel.id}`)
+    redirect(`/app/teams/${teamId}/channels/${firstChannel.id}`)
   }
 
   return (
@@ -37,7 +38,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
           This team doesn't have any channels yet.
         </p>
         <a
-          href={`/app/teams/${params.teamId}/settings`}
+          href={`/app/teams/${teamId}/settings`}
           className="inline-block bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium"
         >
           Team Settings
