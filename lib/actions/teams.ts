@@ -44,11 +44,33 @@ export async function createTeam(formData: CreateTeamForm): Promise<ApiResponse<
   if (teamError) {
     return { error: teamError.message }
   }
+// Add creator as owner in team_members
+  const { error: memberError } = await supabase
+    .from('team_members')
+    .insert({
+      team_id: team.id,
+      user_id: user.id,
+      role: 'owner'
+    })
 
-  // The trigger automatically:
-  // 1. Adds creator as owner in team_members
-  // 2. Creates default "general" channel
-  // So we don't need to do it manually here
+  if (memberError) {
+    return { error: memberError.message }
+  }
+
+  // Create default "general" channel
+  const { error: channelError } = await supabase
+    .from('channels')
+    .insert({
+      name: 'general',
+      description: 'General discussion',
+      team_id: team.id,
+      created_by: user.id,
+      is_private: false
+    })
+
+  if (channelError) {
+    return { error: channelError.message }
+  }
 
   revalidatePath('/app')
   return { data: team, message: 'Team created successfully' }
