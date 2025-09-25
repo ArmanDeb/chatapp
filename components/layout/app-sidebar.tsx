@@ -28,6 +28,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { DeleteTeamDialog } from '@/components/teams/delete-team-dialog'
 
+import { UserSelector } from '@/components/direct-messages/user-selector'
+
 export function AppSidebar() {
   const [teams, setTeams] = useState<Team[]>([])
   const [currentTeam, setCurrentTeam] = useState<Team | null>(null)
@@ -156,7 +158,7 @@ export function AppSidebar() {
     loadChannels()
   }, [currentTeam, user, supabase])
 
-  // Load direct messages
+  // Load direct messages - ALWAYS load regardless of team membership
   useEffect(() => {
     if (!user) return
 
@@ -202,16 +204,6 @@ export function AppSidebar() {
       member?.profiles?.id === user.id && member?.role === 'owner'
     )
 
-  // DEBUG: Log ownership info (remove this in production)
-  // if (currentTeam && user) {
-  //   console.log('🔍 DEBUG Ownership Check:', {
-  //     currentTeam: currentTeam.name,
-  //     userId: user.id,
-  //     teamMembers: currentTeam.team_members,
-  //     isOwner: isCurrentTeamOwner
-  //   })
-  // }
-
   if (isLoading) {
     return (
       <aside className="w-64 bg-muted/50 border-r flex flex-col">
@@ -247,7 +239,14 @@ export function AppSidebar() {
                     </div>
                   </>
                 ) : (
-                  <span className="font-semibold truncate">Select Team</span>
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="font-semibold text-sm truncate">
+                      Messages Privés
+                    </div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {dms.length} conversations
+                    </div>
+                  </div>
                 )}
               </div>
               <ChevronDown className="h-4 w-4 flex-shrink-0 ml-2" />
@@ -298,50 +297,27 @@ export function AppSidebar() {
                       className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-all duration-200"
                       onClick={(e) => {
                         e.stopPropagation()
-                        setCurrentTeam(team)
                         setShowDeleteDialog(true)
                       }}
-                      title="Delete team"
                     >
-                      <Trash2 className="h-3 w-3 text-destructive" />
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   )}
                 </div>
               </DropdownMenuItem>
             ))}
-            
-            <div className="border-t my-1" />
-            
-            <DropdownMenuItem asChild>
-              <Link href="/app/teams/new" className="flex items-center p-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mr-3">
-                  <Plus className="h-4 w-4 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <div className="font-medium text-sm">Create Team</div>
-                  <div className="text-xs text-muted-foreground">Start a new workspace</div>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-            
-            <DropdownMenuItem asChild>
-              <Link href="/app/teams/join" className="flex items-center p-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mr-3">
-                  <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <div className="font-medium text-sm">Join Team</div>
-                  <div className="text-xs text-muted-foreground">Join with invite code</div>
-                </div>
-              </Link>
-            </DropdownMenuItem>
+            {teams.length === 0 && (
+              <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+                Aucune équipe trouvée
+              </div>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto">
-        {currentTeam && (
+        {currentTeam ? (
           <>
             {/* Channels section */}
             <div className="p-2">
@@ -381,11 +357,10 @@ export function AppSidebar() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                   Direct Messages
                 </h3>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                <UserSelector><Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                   <Plus className="h-3 w-3" />
-                </Button>
+                </Button></UserSelector>
               </div>
-              
               <div className="space-y-0.5">
                 {dms.map(dm => (
                   <Link
@@ -417,6 +392,52 @@ export function AppSidebar() {
               </div>
             </div>
           </>
+        ) : (
+          /* Show only Direct Messages when no team is selected */
+          <div className="p-2">
+            <div className="flex items-center justify-between px-2 py-1 mb-1">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Direct Messages
+              </h3>
+              <UserSelector><Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                <Plus className="h-3 w-3" />
+              </Button></UserSelector>
+            </div>
+            <div className="space-y-0.5">
+              {dms.map(dm => (
+                <Link
+                  key={dm.id}
+                  href={`/app/dms/${dm.id}`}
+                  className={`flex items-center px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground transition-colors ${
+                    isDMActive(dm.id) ? 'bg-accent text-accent-foreground' : ''
+                  }`}
+                >
+                  <div className="relative mr-2">
+                    <Avatar className="h-4 w-4">
+                      <AvatarImage src={dm.otherUser?.avatar_url} />
+                      <AvatarFallback className="text-xs">
+                        {dm.otherUser?.display_name?.[0] || dm.otherUser?.id?.[0] || '?'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <UserStatus 
+                      userId={dm.otherUser?.id || ''} 
+                      size="sm" 
+                      className="absolute -bottom-0.5 -right-0.5 border border-background" 
+                    />
+                  </div>
+                  <span className="truncate">
+                    {dm.otherUser?.display_name || 'Unknown User'}
+                  </span>
+                  {/* TODO: Add unread count */}
+                </Link>
+              ))}
+              {dms.length === 0 && (
+                <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+                  Aucune conversation
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
 
@@ -455,19 +476,24 @@ export function AppSidebar() {
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </DropdownMenuItem>
+              <DropdownMenuItem>
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Messages
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
 
-        {/* Delete Team Dialog */}
+      {/* Delete team dialog - Only render when there's a current team */}
+      {currentTeam && (
         <DeleteTeamDialog
-          open={showDeleteDialog}
-          onOpenChange={setShowDeleteDialog}
-          team={currentTeam ? { id: currentTeam.id, name: currentTeam.name } : { id: '', name: '' }}
-          isOwner={!!isCurrentTeamOwner}
+          isOpen={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          team={currentTeam}
           onTeamDeleted={reloadTeams}
         />
+      )}
     </aside>
   )
 }
