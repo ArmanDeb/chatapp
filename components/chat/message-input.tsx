@@ -20,6 +20,10 @@ export function MessageInput() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+  // Debug: log current state
+  console.log('MessageInput - currentChannel:', currentChannel)
+  console.log('MessageInput - currentDM:', currentDM)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -88,12 +92,12 @@ export function MessageInput() {
     return 'Type a message...'
   }
 
-  if (!currentChannel && !currentDM) {
-    return null
-  }
-
+  // Always render for debugging
   return (
     <div className="border-t bg-background p-4">
+      <div className="mb-2 text-xs text-muted-foreground">
+        Debug: currentChannel={currentChannel ? 'YES' : 'NO'}, currentDM={currentDM ? 'YES' : 'NO'}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* File input (hidden) */}
         <input
